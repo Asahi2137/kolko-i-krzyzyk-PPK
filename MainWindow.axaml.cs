@@ -49,7 +49,7 @@ public partial class MainWindow : Window {
     
     //gracz
     (int, int[]) status = PlayMove(r, c);
-    if (CheckEnd(status.Item1, status.Item2)) { WinPathShow(status.Item2); BoardGrid.IsEnabled = false; return; }
+    if (CheckEnd(status.Item1, status.Item2)) { WinPathShow(status.Item2); return; }
     
     //bot
     if (IsPVE) {

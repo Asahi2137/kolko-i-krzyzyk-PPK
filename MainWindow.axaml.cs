@@ -9,7 +9,8 @@ public partial class MainWindow : Window {
   private Bot PlayerAI;
   private Button[,] Buttons = new Button[3,3];
   private int MoveCount;
-  private bool IsPVE = true;
+  private bool IsPVE = true, ReverseTurn = true;
+  private uint ScoreX, ScoreO, Draws;
 
   public MainWindow() {
     InitializeComponent();
@@ -18,13 +19,13 @@ public partial class MainWindow : Window {
   }
 
   private void StartNewGame() {
-    GameLogic = new Game();
+    GameLogic = new Game(ReverseTurn);
     PlayerAI = new HeuristicBot(GameLogic);
     MoveCount = 0;
     BoardGrid.IsHitTestVisible = true;
     BoardGrid.Children.Clear();
-    TurnText.Text = "X";
-
+    TurnText.Text = ReverseTurn ? "X" : "O";
+    ReverseTurn = !ReverseTurn;
     ProceedGameMatrix();
   }
   private void ProceedGameMatrix() {
@@ -74,15 +75,18 @@ public partial class MainWindow : Window {
     //var text = this.FindControl<TextBlock>("TurnText");
     if (s is -1 or 1) {
       TurnText.Text = GameLogic.GetPlayerOne() ? "wygral X" : "wygral O";
+      if (s == -1) { ScoreO++; }
+      else { ScoreX++; }
       WinPathShow(winPath); //BoardGrid.IsEnabled = false;
       BoardGrid.IsHitTestVisible = false;
     }
-    else if (MoveCount == 9) {TurnText.Text = "remis";
+    else if (MoveCount == 9) {
+      TurnText.Text = "remis";
+      Draws++;
       BoardGrid.IsHitTestVisible = false;
-      return true;
     }
     else {return false;}
-
+    ScoreText.Text = $"X: {ScoreX} | O: {ScoreO} | Remisy: {Draws}";
     //var grid = this.FindControl<UniformGrid>("BoardGrid");
     return true;
   }
@@ -100,6 +104,10 @@ public partial class MainWindow : Window {
     }
   }
 
+  public void ResetScores_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) {
+    ScoreX = 0; ScoreO = 0; Draws = 0;
+    ScoreText.Text = $"X: {ScoreX} | O: {ScoreO} | Remis: {Draws}";
+  }
   public void Restart_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) {
     BoardGrid.IsHitTestVisible = true;
     StartNewGame();

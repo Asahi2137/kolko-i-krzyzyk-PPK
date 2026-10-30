@@ -6,9 +6,9 @@ public class Game {
     private bool PlayerOne;
     private int[] RowSum = new int[3], ColsSum = new int[3];
     private int Diag1 = 0, Diag2 = 0;// MoveCount = 0;
-    public Game() {
+    public Game(bool TurnPlayer = false) {
         GameBoard = new Matrix();
-        PlayerOne = true;
+        PlayerOne = TurnPlayer;
     }
 
     public (int, int[]?) SetMove(int r, int c) {

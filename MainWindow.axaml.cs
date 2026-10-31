@@ -68,6 +68,7 @@ public partial class MainWindow : Window {
     (int, int[]) status = GameLogic.SetMove(r, c);
 
     Buttons[r, c].Content =isX ? "X" : "O";
+    Buttons[r,c].Foreground = isX ? Brushes.Red : Brushes.Cyan;
     MoveCount++;
     return status;
   }
